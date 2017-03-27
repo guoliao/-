@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.mapper.OrdinarUserMapper">
+
+             <!--贴吧普通用户注册  -->
+
+<insert id="clearUserRegistration"  parameterType="com.platform.entit.User">
+		INSERT INTO
+		t_user
+		(user_id , username ,password,state,
+		level,email,nickname,address,phone,creat_date)
+		VALUES
+		(#{user_id},#{username},#{password},#{state},#{level},#{email},#{nickname},#{address},#{phone},now())
+</insert>
+
+    <!-- 用户名是否重复 -->
+<select id="selectUserNameYou" parameterType="String"  resultType="int" >
+
+select COUNT(*) FROM t_user WHERE username=#{username}
+</select>
+     <!-- 普通用户发帖 -->
+<insert id="clearUserPost"  parameterType="com.platform.entit.Post" >
+  INSERT INTO
+  t_post
+  (p_id,p_title,p_content,p_date,p_level,p_del_state,user_id,pt_id)
+  VALUES
+  (#{p_id},#{p_title},#{p_content},now(),#{p_level},#{p_del_state},#{user_id},#{pt_id})
+</insert>
+
+ <!-- 普通用户查看帖子 -->
+
+<select id="selectPost"   resultType="com.platform.entit.Post" >
+
+  select * FROM t_post ORDER BY p_date
+
+</select>
+<!-- 普通用户修改帖子 -->
+  <update id="updatePost"  parameterType="com.platform.entit.Post">
+   update t_post
+   <set>
+	<if test="p_title != null and p_title != '' ">
+				p_title = #{p_title},
+	</if>
+	<if test="p_content != null and p_content != '' ">
+				p_content = #{p_content},
+	</if>
+	<if test="pt_id != null and pt_id!= '' ">
+				pt_id= #{pt_id},
+	</if>
+    </set>
+      where 	
+      p_id=#{p_id}
+     </update>
+              <!--  删除帖子       -->
+	<delete id="delectPost" parameterType="java.util.List">
+		DELETE FROM t_post WHERE user_id in
+
+		<foreach collection="list" item="model" open="(" separator=","
+			close=")">
+			#{model.user_id}
+		</foreach>
+	</delete>
+	<!-- 普通用户评论帖子 -->
+    <insert id="addPost" parameterType="com.platform.entit.Comment"  >
+     INSERT INTO
+    t_comment
+    (c_content,c_date,p_id,user_id)
+    VALUES
+    (#{c_content},now(),#{p_id},#{user_id})  
+    </insert>
+	<!-- 普通用户查看评论 -->
+	<select id="selectComment" parameterType="Map" resultType="com.platform.entity.vo.UserVo"> 
+		SELECT * FROM  t_comment tc
+		LEFT JOIN  t_user tu ON tc.user_id=tu.user_id
+		JOIN t_reply tr ON tc.c_id=tr.c_id
+		WHERE  tc.p_id=#{p_id}  ORDER BY  c_date
+	</select> 
+   <!-- 普通用户回复评论 -->
+    <insert id="addReply"  parameterType="com.platform.entit.Reply" >
+        INSERT INTO
+        t_reply
+        (c_id,r_content,user_id,r_date)
+         VALUES
+        (#{c_id},#{r_content},#{user_id},now())  
+     </insert>
+   <!-- 用户查看帖子，回复，评论 -->
+   <select id="selectUserPost" parameterType="Map"  resultType="com.platform.entity.vo.UserVo">
+       SELECT * FROM  t_post  tp, t_comment tc, t_reply tr
+        WHERE  tp.p_id=tc.p_id  
+        AND  tc.c_id=tr.c_id
+        AND tp.p_id=#{p_id} 
+        AND tp.p_del_state=1  ORDER BY  c_date
+   
+   </select>
+   
+   <!-- 用户发帖添加图片 -->
+    <insert id="addPhotoPost"   parameterType="com.platform.entit.Post_img">
+     INSERT INTO
+     t_post_img
+     (pi_img_name,p_id)
+     VALUES
+     (#{pi_img_name},#{p_id})
+    </insert>
+  <!-- 消息推送 -->
+     <insert id="addDiagram"   parameterType="com.platform.entit.News">
+      INSERT INTO
+     t_news
+     (n_title,p_id,user_id,n_date,n_type)
+     VALUES
+     (#{n_title},#{p_id},#{user_id},now(),#{n_type})
+     </insert>
+   <!-- 普通用户查看帖子详情 -->
+   <select id="findOnePost" parameterType="Map"   resultType="com.platform.entity.vo.UserVo">   
+   SELECT * FROM t_post tp, t_post_img tpi
+   WHERE  tp.p_id=tpi.p_id
+   AND tp.p_id=#{p_id} AND p_del_state=1 
+   </select>
+   <!-- 普通用户查看回复评论 -->
+   <select id="selectComAndRep"  parameterType="Map"  resultType="com.platform.entity.vo.UserVo">
+  SELECT * FROM t_comment  tc   LEFT JOIN t_reply tr on  tc.c_id=tr.c_id  where tc.p_id=#{p_id}
+   
+   </select>
+</mapper>

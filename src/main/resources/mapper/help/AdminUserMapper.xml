@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.mapper.AdminUserMapper">
+
+  <!-- 管理员查看所有帖子 -->
+
+<select id="findAllPost"  resultType="com.platform.entit.Post">
+
+      SELECT * FROM t_post where  p_del_state=1  ORDER BY p_date
+</select>
+
+   <!-- 管理员删除 ，置顶帖子  （改下状态） -->
+<update id="updatePost"  parameterType="com.platform.entit.Post" >  
+      update t_post
+      <set>
+	<if test="p_del_state != null and p_del_state != '' ">
+				p_del_state = #{p_del_state},
+	</if>
+	<if test="p_level != null and p_level != '' ">
+				p_level = #{p_level}
+	</if>
+	  </set>
+    where
+    p_id=#{p_id}
+</update>  
+
+   <!-- 管理员添加帖子所属类别 -->
+<insert id="addPostType"    parameterType="com.platform.entit.Post_type" >
+     INSERT INTO
+     t_post_type
+     (pt_id,pt_name)
+     VALUES
+     (#{pt_id},#{pt_name})
+
+</insert>
+
+   <!-- 管理员查找所有类别 -->
+  <select id="findAllType"  resultType="com.platform.entit.Post_type" >  
+  select * FROM t_post_type
+  </select>
+</mapper>

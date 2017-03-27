@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.mapper.HelpMapper">
+
+    <!-- 贴吧用户登录 -->  
+<select id="userLogin"   parameterType="java.util.Map"  resultType="com.platform.entit.User">
+SELECT * FROM t_user where username=#{username} AND password=#{password}
+</select>
+
+    <!-- 根据帖子ID查找帖子标题 -->
+<select id="selectTitleByID" parameterType="String"   resultType="com.platform.entit.Post" >
+SELECT * FROM t_post WHERE p_id=#{p_id}   
+</select>
+    
+</mapper>
