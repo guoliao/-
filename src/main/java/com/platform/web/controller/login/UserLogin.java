@@ -53,6 +53,16 @@ System.out.println("123");
 		maps.put("username", username);
 		maps.put("password", password);
 	    user =	helpservice.userLogin(maps);
+	    if(user.getUsername().equals("")&& user.getPassword().equals("")){
+	    	
+	    	
+	    	 model.addAttribute("list", "登陆失败,用户名或密码错误");
+	    	
+	    	 return  "rediract:to_Login" ;
+	    	
+	    	
+	    }
+	    
 	    model.addAttribute("list", "登陆成功");
 		session.setAttribute(Constants.SESSION_USER, user);
 		

@@ -3,6 +3,7 @@ package com.platform.web.controller.user;
 import java.beans.PropertyEditorSupport;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -148,17 +149,33 @@ public class OrdinarUserController {
 	@RequestMapping(value="selectPost", method=RequestMethod.GET)
 	@ResponseBody
 	public Map<String , Object> selectPost(Model model,HttpSession session){
-		User u = (User) session.getAttribute(Constants.SESSION_USER);
-		String user_id=u.getUser_id();
-		System.out.println("获取到的id"+user_id);
+	//	User u = (User) session.getAttribute(Constants.SESSION_USER);
+	//	String user_id=u.getUser_id();
+	//	System.out.println("获取到的id"+user_id);
 		Map<String,Object> map=new HashMap<String,Object>();
 		Map<String,Object> mapList=new HashMap<String,Object>();
 		List<Post>  post=new ArrayList<Post>();
-		map.put("user_id",user_id);	
-		map.put("p_del_state",Constants.POST_TYPE_YOU);
+		List<Post>  lists=new ArrayList<Post>();
+	//	map.put("user_id",user_id);	
+	//	map.put("p_del_state",Constants.POST_TYPE_YOU);
 		post=ordinarUserService.selectPost();
+		
+	    for(int i = 0; i < post.size(); i++){
+	    	    Post p=new Post();
+	    	   SimpleDateFormat ss = new SimpleDateFormat("yyyy-MM-dd");  
+			try {
+				 String dateNowStr = ss.format(ss.parse(post.get(i).getP_date()));
+				  p.setP_date(dateNowStr);
+			      p.setP_title(post.get(i).getP_title());
+			      p.setP_content(post.get(i).getP_content());
+			     lists.add(p);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			} 	
+	       
+	    }
 		System.out.println("找到的帖子个数"+post);
-		mapList.put("list", post);
+		mapList.put("list", lists);
 		return mapList;
 	}
 	
