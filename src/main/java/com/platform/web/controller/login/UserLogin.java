@@ -101,7 +101,7 @@ System.out.println("123");
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.removeAttribute(Constants.SESSION_USER);  
-		return "";
+		return "user/login";
 	}
 	
 	

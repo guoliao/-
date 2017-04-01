@@ -27,8 +27,8 @@ public class Constants {
     /**
 	 * 本地文件上传 地址
 	 * 
-	 */
-	public static final String UPLOAD_USER_SINESSLICENSES_PATH = "/resources/upload/user/postPhoto"  ;    // 营业执照
+	 */                                                           
+	public static final String UPLOAD_USER_SINESSLICENSES_PATH = "/resources/upload/user";    //贴吧图片
 	public static final String UPLOAD_XLS_PATH = "/resources/upload/xls";
 	public static final String UPLOAD_PDF_PATH = "/resources/upload/pdf";
 	public static final String UPLOAD_DTB_PATH = "/resources/upload/data";

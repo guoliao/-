@@ -45,4 +45,6 @@ public interface OrdinarUserService  {
 	 public List<UserVo> findOnePost(Map<String,Object> map);            //普通用户查看帖子详情
 	 
 	 public List<UserVo>  selectComAndRep(Map<String,Object> map) ;      //普通用户查看回复，评论
+	 
+	 public List<UserVo>   selectPostByTitle(Map<String,Object> map);     //普通用户搜索帖子
 }

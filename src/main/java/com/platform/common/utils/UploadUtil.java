@@ -29,7 +29,7 @@ public class UploadUtil {
 						file.getOriginalFilename().lastIndexOf("."), file.getOriginalFilename().length()) : null;
 				fileName = type.toLowerCase();
 				
-				
+				System.out.println("filePath-----"+filePath);
 				String fileName1 = user_id + fileName;
 				File f = new File(filePath, fileName1);
 				if (f.exists()) {

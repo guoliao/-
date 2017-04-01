@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html lang="zh" class="no-js">
 <head>
@@ -17,10 +21,7 @@
  <script src="${pageContext.request.contextPath}/resources/js/index/bootstrap.min.js"></script> 
  <link href="${pageContext.request.contextPath}/resources/css/index/index.css" rel="stylesheet"> 
 </head>
-<style>
-	.tc{text-align: right;}
 
-</style>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top ">
 		<div class="navbar-header">
@@ -51,8 +52,7 @@
 			
 		</div>
 		<form id="searchForm" class="navbar-form navbar-right" role="search"
-			action="${pageContext.request.contextPath}/pbs/user/findPostByTitle" 
-			method="post" target="_blank">
+			action="${pageContext.request.contextPath}/pbs/user/findPostByTitle" method="post">
 			<div class="input-group">
 				<input type="text" class="form-control" name="p_title"
 					placeholder="search"> 
@@ -130,109 +130,31 @@
 
 	<div id="container" class="container" style="margin-top: 30px;">
 		<div class="row">
-			<div class="col-md-9">
+			<div class="col-md-12">
 				<ul class="list-group">
 					<div class="list-group-item active">
-						论坛新帖 
-						<a href="${pageContext.request.contextPath}/pbs/user/selectMorePost" style="float: right; color: white">
-							更多>>
-						</a>
+						全部新帖 
 					</div>
 
 				</ul>
-				<div id="XINTIE">
-
-				</div>
-			</div>
-			<div class="col-md-3">
-				<img alt="" src="${pageContext.request.contextPath}/resources/image/index/8-1003091632460.jpg" width="100%">
-				<img alt="" src="${pageContext.request.contextPath}/resources/image/index/18823610_135127762000_2.jpg" width="100%">
-				<img alt="" src="${pageContext.request.contextPath}/resources/image/index/2015113015062515062575.jpg" width="100%">
 			</div>
 		</div>
-		
-		<div class="row">
-			<div class="col-md-9">
-
-				<ul class="list-group">
-					<div class="list-group-item active">
-						精华帖 <a
-							href="<%=request.getContextPath() %>/more.action?type=-1&&page=1"
-							style="float: right; color: white">更多>></a>
-						<!--<p style="float: right"></p>-->
-					</div>
-				</ul>
-				<div id="JINGHUA">
-				</div>
+		<div id="XINTIE">
+			<c:forEach items="${list}" var="list" varStatus="vs">
 				<div class="blog-post">
 					<h3 class="blog-post-title">
-						<a href="javascript:(void);">iOS 10.3开发者beta5全机型固件及描述文件下载</a>
+						<a href="${pageContext.request.contextPath}/pbs/user/userFindPost?p_id=${list.p_id}">${list.p_title}</a>
 					</h3>
 					<p class="blog-post-meta">
-						2015年2月3日 分组：<a href="#">论坛新帖</a>
+						${list.p_date}
+						<a href="#">：Web开发</a>
 					</p>
-					<p class="blog-post-content">苹果今天凌晨正式推送iOS10.3
-						Beta5开发者预览版固件更新升级，已安装相应描述文件的iPhone、iPad、iPod
-						touch用户，可直接在设置中检查获取此次OTA更新。本次更新下载安装包在432.2MB左右，主要是Bug修复和改进提升。</p>
-				</div>
-				<hr />
-				<div class="blog-post">
-					<h3 class="blog-post-title">
-						<a href="javascript:(void);">iOS 10.3开发者beta5全机型固件及描述文件下载</a>
-					</h3>
-					<p class="blog-post-meta">
-						2015年2月3日 分组：<a href="#">论坛新帖</a>
+					<p class="blog-post-content">
+						${list.p_content}
 					</p>
-					<p class="blog-post-content">苹果今天凌晨正式推送iOS10.3
-						Beta5开发者预览版固件更新升级，已安装相应描述文件的iPhone、iPad、iPod
-						touch用户，可直接在设置中检查获取此次OTA更新。本次更新下载安装包在432.2MB左右，主要是Bug修复和改进提升。</p>
 				</div>
-				<hr />
-				<div class="blog-post">
-					<h3 class="blog-post-title">
-						<a href="javascript:(void);">iOS 10.3开发者beta5全机型固件及描述文件下载</a>
-					</h3>
-					<p class="blog-post-meta">
-						2015年2月3日 分组：<a href="#">论坛新帖</a>
-					</p>
-					<p class="blog-post-content">苹果今天凌晨正式推送iOS10.3
-						Beta5开发者预览版固件更新升级，已安装相应描述文件的iPhone、iPad、iPod
-						touch用户，可直接在设置中检查获取此次OTA更新。本次更新下载安装包在432.2MB左右，主要是Bug修复和改进提升。</p>
-				</div>
-				<hr />
-				<div class="blog-post">
-					<h3 class="blog-post-title">
-						<a href="javascript:(void);">iOS 10.3开发者beta5全机型固件及描述文件下载</a>
-					</h3>
-					<p class="blog-post-meta">
-						2015年2月3日 分组：<a href="#">论坛新帖</a>
-					</p>
-					<p class="blog-post-content">苹果今天凌晨正式推送iOS10.3
-						Beta5开发者预览版固件更新升级，已安装相应描述文件的iPhone、iPad、iPod
-						touch用户，可直接在设置中检查获取此次OTA更新。本次更新下载安装包在432.2MB左右，主要是Bug修复和改进提升。</p>
-				</div>
-				<hr />
-			</div>
-
-			<div class="col-md-3">
-				<ul class="list-group">
-					<div class="list-group-item active">论坛公告</div>
-					<div class="blog-post">
-						<h3 class="blog-post-title">
-							<a href="javascript:(void);">iOS 10.3开发者beta5全机型固件及描述文件下载</a>
-						</h3>
-						<p class="blog-post-meta">
-							2015年2月3日 分组：<a href="#">论坛新帖</a>
-						</p>
-
-					</div>
-					<hr>
-				</ul>
-				<a href="${pageContext.request.contextPath}/pbs/user/to_Publish_post">
-					<button type="button" class="btn btn-primary"
-						style="width: 200px; height: 50px; margin-left: 30px">我要发帖</button>
-				</a>
-			</div>
+			</c:forEach>
+			<hr>
 		</div>
 	</div>
 	<div
@@ -250,40 +172,6 @@
 	</div>
 	
 <script type="text/javascript">
- $(document).ready(function(){
-	 var base = "${pageContext.request.contextPath}";
-	 $.ajax({
-		 url: base+"/pbs/user/selectPost",
-	 	type:"GET",
-	 	data:'',
-	 	async: false,//要求同步 不是不需看你的需求
-	 	error : function(result) {  
-        },
-	 	success : function(result) {
-	 		var data = eval(result.list);
-	 		var str = JSON.stringify(data);
-        	//alert(str);
-        	console.log(str);
-        	for(var key in data){
-        		$('#XINTIE').append(
-       				'<div class="blog-post>'+
-       					'<h3 class="blog-post-title">'+
-       						'<a href="'+base+'/pbs/user/userFindPost?p_id='+data[key].p_id+'">'+data[key].p_title+'</a>'+
-       					'</h3>'+
-       					'<p class="blog-post-meta  tc">'
-       						+data[key].p_date+
-       						'<a href="#">：论坛新帖</a>'+
-       					'</p>'+
-       					'<p class="blog-post-content">'
-       						+data[key].p_content+
-       					'</p>'+
-       				'</div>'+
-       				'<hr>'	
-        		);
-        	}
-	 	}
-	 })
- })
  function subSearchFrom(){
 	 $('#searchForm').submit();
  }

@@ -34,7 +34,7 @@ select COUNT(*) FROM t_user WHERE username=#{username}
 
 <select id="selectPost"   resultType="com.platform.entit.Post" >
 
-  select * FROM t_post ORDER BY p_date
+  select * FROM t_post ORDER BY p_date limit 0,10
 
 </select>
 <!-- 普通用户修改帖子 -->
@@ -75,8 +75,10 @@ select COUNT(*) FROM t_user WHERE username=#{username}
 	<select id="selectComment" parameterType="Map" resultType="com.platform.entity.vo.UserVo"> 
 		SELECT * FROM  t_comment tc
 		LEFT JOIN  t_user tu ON tc.user_id=tu.user_id
-		JOIN t_reply tr ON tc.c_id=tr.c_id
-		WHERE  tc.p_id=#{p_id}  ORDER BY  c_date
+		LEFT JOIN t_reply tr ON tc.c_id=tr.c_id	
+        LEFT JOIN t_post tp  ON  tp.p_id=tc.p_id
+        LEFT JOIN t_post_img tpi ON   tpi.p_id=tp.p_id
+		WHERE  tc.p_id=#{p_id}  ORDER BY  c_date  
 	</select> 
    <!-- 普通用户回复评论 -->
     <insert id="addReply"  parameterType="com.platform.entit.Reply" >
@@ -114,13 +116,27 @@ select COUNT(*) FROM t_user WHERE username=#{username}
      </insert>
    <!-- 普通用户查看帖子详情 -->
    <select id="findOnePost" parameterType="Map"   resultType="com.platform.entity.vo.UserVo">   
-   SELECT * FROM t_post tp, t_post_img tpi
-   WHERE  tp.p_id=tpi.p_id
-   AND tp.p_id=#{p_id} AND p_del_state=1 
+    SELECT * FROM t_post tp
+   LEFT JOIN  t_user tu ON tu.user_id=tp.user_id
+   LEFT JOIN  t_post_img tpi ON   tpi.p_id=tp.p_id
+    WHERE  tp.p_id=#{p_id} AND p_del_state=1 
    </select>
    <!-- 普通用户查看回复评论 -->
    <select id="selectComAndRep"  parameterType="Map"  resultType="com.platform.entity.vo.UserVo">
-  SELECT * FROM t_comment  tc   LEFT JOIN t_reply tr on  tc.c_id=tr.c_id  where tc.p_id=#{p_id}
+  SELECT * FROM  t_comment tc
+		LEFT JOIN  t_user tu ON tc.user_id=tu.user_id
+		LEFT JOIN t_reply tr ON tc.c_id=tr.c_id	
+        LEFT JOIN t_post tp  ON  tp.p_id=tc.p_id
+        LEFT JOIN t_post_img tpi ON   tpi.p_id=tp.p_id
+		WHERE  tc.p_id=#{p_id}  ORDER BY  c_date 
    
+   </select>
+   
+   <!-- 模糊搜索帖子 -->
+    <select id="selectPostByTitle"  parameterType="Map"  resultType="com.platform.entity.vo.UserVo">
+            SELECT * FROM  t_post WHERE 
+			 p_title LIKE CONCAT(CONCAT('%', #{p_title}), '%') 
+			 AND p_del_state=1 
+ 
    </select>
 </mapper>

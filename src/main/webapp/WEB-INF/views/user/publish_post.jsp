@@ -120,7 +120,7 @@
     	 	success : function(result) {
     	 		var data = eval(result.list);
     	 		var str = JSON.stringify(data);
-            	alert(str);
+            	//alert(str);
             	console.log(str);
             	for(var key in data){
             		$('#postType')
@@ -172,6 +172,7 @@
 			<tr>
 				<th></th>
 				<td><input type="submit" value="提交" /></td>
+				
 			</tr>
 		</table>
 	</form>

@@ -1,5 +1,7 @@
 package com.platform.service.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.platform.common.contants.Constants;
 import com.platform.common.utils.UUIDUtil;
 import com.platform.common.utils.UploadUtil;
 import com.platform.entit.Comment;
@@ -114,12 +117,13 @@ public class OrdinarUserServiceImpl implements OrdinarUserService {
    public void  addPhotoPost(Post_img pi,MultipartFile permitsfile,String filepath){
 	   
 	   String fileName = permitsfile.getOriginalFilename();  //获取图片原路径
-       
-		String newfileName = UUIDUtil.getRandom32PK() + fileName.substring(fileName.lastIndexOf(".")); 
+        String u_id= UUIDUtil.getRandom32PK();
+		String newfileName = u_id + fileName.substring(fileName.lastIndexOf(".")); 
 		pi.setPi_img_name(newfileName);
 	    System.out.println("获取到的图片********"+newfileName);
 		ordinarUserMapper.addPhotoPost(pi);
-		UploadUtil.saveFile(permitsfile, newfileName, pi.getP_id() + "");
+
+		UploadUtil.saveFile(permitsfile, filepath, u_id);
    }
     /*
      * 消息推送               
@@ -141,5 +145,18 @@ public class OrdinarUserServiceImpl implements OrdinarUserService {
 public List<UserVo> selectComAndRep(Map<String,Object> map) {
 	
 	return ordinarUserMapper.selectComAndRep(map);
+	
+	
+}
+
+/*
+ * 普通用户搜索帖子
+ */
+
+public List<UserVo>   selectPostByTitle(Map<String,Object> map){
+	
+	
+	return ordinarUserMapper.selectPostByTitle(map);
+	
 }
 }

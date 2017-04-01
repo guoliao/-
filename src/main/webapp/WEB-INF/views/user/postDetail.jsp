@@ -110,35 +110,31 @@
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-				<li><a href="#">华为专区</a></li>
-				<li><a href="#">苹果专区</a></li>
-				<li><a href="#">OPPO专区</a></li>
-				<li><a href="#">三星专区</a></li>
-				<li><a href="#">vivo专区</a></li>
-
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown"> 其他 <b class="caret"></b>
-				</a>
-					<ul class="dropdown-menu">
-						<li><a href="#">最新帖子</a></li>
-						<li><a href="#">最热帖子</a></li>
-						<li><a href="#">今日头条</a></li>
-						<li><a href="#">热门品牌论坛</a></li>
-					</ul></li>
+				<li><a href="${pageContext.request.contextPath}/pbs/user/to_index">华为专区</a></li>
+				<li><a href="${pageContext.request.contextPath}/pbs/user/to_index">苹果专区</a></li>
+				<li><a href="${pageContext.request.contextPath}/pbs/user/to_index">OPPO专区</a></li>
+				<li><a href="${pageContext.request.contextPath}/pbs/user/to_index">三星专区</a></li>
+				<li><a href="${pageContext.request.contextPath}/pbs/user/to_index">vivo专区</a></li>
 			</ul>
 
-			<ul class="nav navbar-nav navbar-right user">
-				<li><a href="#">登陆</a></li>
-				<li><a href="#">注册</a></li>
-			</ul>
-			<p class="navbar-text navbar-right">尊敬的游客您好！</p>
+			 <ul class="nav navbar-nav navbar-right user">
+				<!-- <li><a href="#">登陆</a></li>
+				<li><a href="#">注册</a></li> -->
+			</ul> 
+			<p class="navbar-text navbar-right">   </p>
+			<a href="${pageContext.request.contextPath}/user/login/logout" class="navbar-text navbar-right" style="cursor:pointer;color:#fff;">退出</a>
+			<p class="navbar-text navbar-right">${user.nickname},您好！</p>
+			
 		</div>
-		<form class="navbar-form navbar-right" role="search"
-			action="<%=request.getContextPath()%>/search.action">
+		<form id="searchForm" class="navbar-form navbar-right" role="search"
+			action="${pageContext.request.contextPath}/pbs/user/findPostByTitle" 
+			method="post" target="_blank">
 			<div class="input-group">
-				<input type="text" class="form-control" name="keywords"
-					placeholder="search"> <span class="input-group-addon"><span
-					class="glyphicon glyphicon-search"></span> </span>
+				<input type="text" class="form-control" name="p_title"
+					placeholder="search"> 
+					<span onclick="subSearchFrom();" class="input-group-addon" style="cursor:pointer;">
+						<span class="glyphicon glyphicon-search"></span> 
+					</span>
 			</div>
 		</form>
 	</nav>
@@ -167,6 +163,10 @@
 				<p style="line-height: 28px;">
 					&nbsp;&nbsp;${list[0].p_content}
 				</p>
+				<p>
+					<img src="${pageContext.request.contextPath}/resources/upload/user/${list[0].pi_img_name}"
+					width="300px" height="300px" />
+				</p>
 			</div>
 		</div>
 		<form action="${pageContext.request.contextPath}/pbs/user/addPost" method="post">
@@ -190,25 +190,24 @@
 								style="width: 100px; height: 60px; max-width: 60px;display: inline;"
 								src="${pageContext.request.contextPath}/resources/image/index/4.jpg">
 						<span>${list.nickname}：${list.c_content}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-						<a id="modal-935009" onclick="setC_id('${list.c_id}')"
+						<a id="modal-935009" onclick="setC_id('${list.p_id}','${list.c_id}')"
 							href="#modal-container-935001" role="button" 
 							data-toggle="modal" style="cursor: pointer;">回复</a>
 					</div>
 				</div>
-			</c:forEach>
-		</c:if>
-		<c:if test="${not empty list}">
-		 	<c:forEach items="${list}" var="list" varStatus="vs">
 				<div class="row">
 					<div style="float:right;">
 						<img class="media-object img-circle img-thumbnail"
 								style="width: 100px; height: 60px; max-width: 60px;display: inline;"
 								src="${pageContext.request.contextPath}/resources/image/index/4.jpg">
-						<span >${list.nickname}&nbsp;&nbsp;回复${list.nickname}：${list.r_content}</span>
+						<span >${user.nickname}&nbsp;&nbsp;回复&nbsp;&nbsp;${list.nickname}：${list.r_content}</span>
 					</div>
-				</div> 
-			</c:forEach> 
+				</div>
+			</c:forEach>
 		</c:if>
+		 	<%-- <c:forEach items="${list}" var="list" varStatus="vs">
+				 
+			</c:forEach> --%> 
 		<footer style="height:10em;width:100px;"></footer>
 	</div>
 <div class="modal fade" id="modal-container-935001" role="dialog"
@@ -221,6 +220,7 @@
 					<h4 class="modal-title" id="myModalLabel">回复评论</h4>
 				</div>
 				<form action="${pageContext.request.contextPath}/pbs/user/commentReply" method="post">
+					<input type="hidden" name="p_id" id="p_id">
 					<input type="hidden" name="c_id" id="c_id">
 					<div class="modal-body">
 						<div class="row">
@@ -243,8 +243,13 @@
 	</div>
 </body>
 <script type="text/javascript">
-	function setC_id(cid){
+	function setC_id(pid,cid){
+		document.getElementById('p_id').value = pid;
 		document.getElementById('c_id').value = cid;
 	}
+	
+	 function subSearchFrom(){
+		 $('#searchForm').submit();
+	 }
 </script>
 </html>
